@@ -17,7 +17,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
  */
-
 void spi_spiop(uint32_t sbytes, uint32_t rbytes);
 uint8_t spi_uninit(void);
 uint32_t spi_set_speed(uint32_t hz);

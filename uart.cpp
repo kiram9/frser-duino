@@ -18,9 +18,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
  */
 
-#include "main.h"
 #include "uart.h"
-
+#if !defined(__MK20DX256__)
 // UART MODULE START
 typedef uint16_t urxbufoff_t;
 typedef uint8_t utxbufoff_t;
@@ -96,3 +95,4 @@ void uart_init(void) {
 
 void uart_wait_txdone(void) {
 }
+#endif 

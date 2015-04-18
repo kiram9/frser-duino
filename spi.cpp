@@ -19,15 +19,69 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
  */
-
-#include "main.h"
+#include <SPI.h>
 #include "spi.h"
 #include "uart.h"
 #include "frser.h"
-
+#include "udelay.h"
 static int spi_initialized = 0;
+static uint32_t spi_set_spd = 0; /* Max speed - F_CPU/2 */
+#if defined(__MK20DX256__)
 
-static uint8_t spi_set_spd = 0; /* Max speed - F_CPU/2 */
+static void spi_select(void) {
+  digitalWrite(10, LOW);
+}
+
+void spi_deselect(void) {
+  digitalWrite(10, HIGH);
+}
+
+void spi_init(void) {
+  pinMode (10, OUTPUT);
+  SPI.begin(); 
+  spi_deselect(); 
+}
+
+static uint8_t spi_txrx(const uint8_t c) {
+    return SPI.transfer(c);
+}
+
+
+void spi_init_cond(void) {
+	if (!spi_initialized) {
+		spi_init();
+		spi_initialized = 1;
+	}
+}
+
+uint8_t spi_uninit(void) {
+	if (spi_initialized) {
+                SPI.endTransaction(); 
+		spi_initialized = 0;
+		return 1;
+	}
+	return 0;
+}
+
+
+void spi_spiop(uint32_t sbytes, uint32_t rbytes) {
+	spi_init_cond();
+        SPI.beginTransaction(SPISettings(spi_set_spd, MSBFIRST, SPI_MODE0)); 
+	spi_select();
+	while (sbytes--) {
+          while (ISDATA() == 0) udelay(1);
+          spi_txrx(RECEIVE());
+        }
+	SEND(S_ACK);
+	while (rbytes--) SEND(spi_txrx(0xFF));
+	spi_deselect();
+}
+
+uint32_t spi_set_speed(uint32_t hz){
+  spi_set_spd = hz; 
+  return hz; 
+}
+#else 
 
 const uint8_t PROGMEM spd_table[7] = {
 	0x80, // SPI2X is 0x80 in this table because i say so. - div 2
@@ -139,3 +193,5 @@ void spi_spiop(uint32_t sbytes, uint32_t rbytes) {
 	while (rbytes--) SEND(spi_txrx(0xFF));
 	spi_deselect();
 }
+
+#endif 

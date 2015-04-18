@@ -18,15 +18,5 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
  */
 
-#include "main.h"
-#include "uart.h"
-#include "frser.h"
-
-
-int main(void) {
-	cli();
-	uart_init();
-	frser_main();
-}
-
-
+/* GENERIC DEFINITIONS FOR PROJECT */
+#include <Wprogram.h>

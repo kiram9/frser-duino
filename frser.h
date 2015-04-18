@@ -17,8 +17,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
  */
+#if defined(__MK20DX256__)
+#define PROGMEM 
+#define PGM_P const char *
+#define BAUD 115200
+#endif 
 
-void frser_main(void) __attribute__((noreturn));
+void frser_main(void);
 
 /* Flashrom serial interface AVR implementation */
 #define S_ACK 0x06

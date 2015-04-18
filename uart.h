@@ -19,6 +19,15 @@
  */
 
 /* UART MODULE HEADER */
+#if defined(__MK20DX256__)
+#include <Wprogram.h>
+#define RECEIVE() Serial.read()
+#define SEND(n) Serial.write(uint8_t(n)) 
+#define ISDATA() Serial.available()
+#define SENDDONE() Serial.send_now()
+#define INITSERIAL() Serial.begin(115200); 
+#define UART_BUFLEN 1024
+#else 
 uint8_t uart_isdata(void);
 uint8_t uart_recv(void);
 void uart_send(uint8_t val);
@@ -30,7 +39,12 @@ void uart_wait_txdone(void);
 
 #define RECEIVE() uart_recv()
 #define SEND(n) uart_send(n)
+#define INITSERIAL() uart_init()
+#define ISDATA() true
+#define SENDDONE() while(0)
 #define UART_BUFLEN 1024
 /* Compat; Int Tx support was stripped. */
 #define UART_POLLED_TX
 #define UARTTX_BUFLEN 0
+
+#endif 

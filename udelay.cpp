@@ -18,16 +18,15 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
  */
 
-#include "main.h"
 #include "udelay.h"
 
 void udelay(uint32_t usecs) {
 	if (usecs < 16) {
 		uint8_t i=usecs;
-		do { _delay_us(1); } while(--i);
+		do { delayMicroseconds(1); } while(--i);
 		return;
 	}
 	usecs >>= 4; // div 16;
-	do { _delay_us(16); } while(--usecs);
+	do { delayMicroseconds(16); } while(--usecs);
 	return;
 }

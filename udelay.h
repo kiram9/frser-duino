@@ -17,5 +17,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
  */
-
+#if defined(__MK20DX256__)
+#include <Wprogram.h>
+#endif 
 void udelay(uint32_t usecs);

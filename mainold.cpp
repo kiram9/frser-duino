@@ -17,21 +17,26 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
  */
+#if !defined(__MK20DX256__)
+#include "main.h"
+#include "uart.h"
+#include "frser.h"
 
-/* GENERIC DEFINITIONS FOR PROJECT */
-#define F_CPU 16000000UL
-#include <util/delay.h>
-#include <avr/io.h>
-#include <avr/interrupt.h>
-#include <avr/sleep.h>
-#include <avr/pgmspace.h>
-#include <avr/eeprom.h>
-#include <avr/power.h>
-#include <avr/sleep.h>
-#include <util/delay.h>
-#include <ctype.h>
-#include <string.h>
-#include <stdlib.h>
-#include <alloca.h>
-#include <inttypes.h>
-#include <setjmp.h>
+extern "C" int main(void) {
+	cli();
+  INITSERIAL();
+  const int ledPin = 13;
+  const int wpPin = 9;
+  pinMode(ledPin, OUTPUT);
+  digitalWrite(ledPin, HIGH);   // set the LED on
+  pinMode(wpPin, OUTPUT);
+  digitalWrite(wpPin, HIGH);   // set wp off
+  for(;;) {
+  	  frser_main();
+    yield();
+  }
+        
+}
+
+#endif 
+
